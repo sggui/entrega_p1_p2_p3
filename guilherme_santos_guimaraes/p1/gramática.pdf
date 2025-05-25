@@ -1,0 +1,24 @@
+<modulo> ::= "PROGRAMA" <espaco>? <identificador> ":" <quebra>
+             <bloco_codigo>
+
+<identificador> ::= "\"" <nome> "\"" | <nome>
+<nome> ::= <alfanumerico> <resto_nome>?
+<resto_nome> ::= <alfanumerico>*
+
+<bloco_codigo> ::= "INICIO" <quebra> <comandos> <saida> "FIM" <espaco>? <quebra>?
+<comandos> ::= (<atribuicao_linha>)*
+
+<atribuicao_linha> ::= <atribuicao> <espaco>? <quebra>
+<atribuicao> ::= <nome> <espaco>? "=" <espaco>? <expressao>
+
+<saida> ::= "RES" <espaco>? "=" <espaco>? <expressao> <espaco>? <quebra>
+
+<expressao> ::= <termo> ( <espaco>? ("+" | "-") <espaco>? <termo> )*
+<termo> ::= <fator> ( <espaco>? ("*" | "/") <espaco>? <fator> )*
+<fator> ::= "(" <espaco>? <expressao> <espaco>? ")" | <numero> | <nome>
+
+<alfanumerico> ::= [A-Z] | [a-z] | [0-9] | "_"
+<numero> ::= [0-9]+
+<espaco> ::= (" " | "\t")*
+<quebra> ::= "\n"
+

@@ -1,0 +1,27 @@
+O arquivo assembler.c implementa um montador responsável por traduzir arquivos de código de montagem com extensão .asm para arquivos binários executáveis .bin, que podem ser interpretados 
+por um simulador de processador. O assembler trabalha com uma linguagem de montagem simples, cuja gramática é composta por duas seções principais: a seção .DATA, onde são declaradas variáveis 
+e constantes, e a seção .CODE, onde são especificadas as instruções a serem executadas. Na seção .DATA, cada linha declara um identificador seguido pela palavra-chave DB e um valor inicial 
+(ou o caractere ?, caso o valor ainda não esteja definido). Já na seção .CODE, cada linha representa uma instrução, que pode ou não receber um operando, dependendo da operação. 
+O assembler reconhece mnemônicos como LDA, STA, ADD, SUB, OR, AND, NOT, JMP, JMN, JMZ, NOP e HLT, traduzindo-os para seus respectivos opcodes, e associa operandos a endereços relativos na memória.
+
+Durante a montagem, o assembler percorre o arquivo .asm linha por linha, identificando se está na seção de dados ou de código. No caso das variáveis, ele atribui um endereço de memória adequado e armazena 
+os valores fornecidos, garantindo alinhamento adequado. Para as instruções da seção .CODE, o programa converte cada mnemônico em uma sequência de quatro bytes, composta pelo opcode e operandos codificados. 
+As instruções sem operando, como HLT e NOP, recebem bytes de preenchimento. Labels terminados em dois-pontos são reconhecidos, mas ignorados, pois não são utilizados para controle de fluxo no binário gerado.
+
+Ao final do processo, o assembler garante que a última instrução seja HLT, evitando execução indefinida. Toda a memória, incluindo o cabeçalho fixo (0x03, 'N', 'D', 'R'), os dados e o código, é gravada em um arquivo .bin com tamanho fixo de 512 bytes. O binário resultante está estruturado para ser interpretado corretamente por um processador simulado que lê os opcodes e executa as operações correspondentes, que no caso deste projeto é o executor.c.
+
+Abaixo estão as instruções possíveis:
+
+Instrução	Opcode	Descrição
+NOP		0x00	Não realiza nenhuma operação. Serve como preenchimento ou espera.
+STA		0x10	Armazena o valor do acumulador na memória, em uma variável.
+LDA		0x20	Carrega o valor de uma variável para o acumulador.
+ADD		0x30	Soma o valor de uma variável ao acumulador.
+SUB		0x31	Subtrai o valor de uma variável do acumulador.
+OR		0x40	Realiza um OR lógico entre o acumulador e uma variável.
+AND		0x50	Faz um AND lógico entre o acumulador e uma variável.
+NOT		0x60	Inverte todos os bits do acumulador.
+JMP		0x80	Salta incondicionalmente para uma posição de código.
+JMN		0x90	Salta se o valor do acumulador for negativo.
+JMZ		0xA0	Salta se o valor do acumulador for zero.
+HLT		0xF0	Para a execução do programa.
